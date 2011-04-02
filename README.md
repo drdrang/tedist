@@ -19,7 +19,7 @@ and I'd get a new `Symbols.tedist` in the same directory.
 
 If you want to change more than just the prefix, run `reabbrev`. It loops through all the snippets in the given file and allows you to change the abbreviation of each one. A session would look like this:
 
-    ./reabbrev ~/Desktop/Symbols.textexpander 
+    reabbrev Symbols.textexpander 
     Label: ½
     Abbreviation [;1/2]: 
 
