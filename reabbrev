@@ -1,0 +1,33 @@
+#!/usr/bin/python
+
+import plistlib
+import sys
+import os.path
+
+# Get the TextExpander snippet filename from the command line.
+fn = os.path.abspath(sys.argv[1])
+
+# Extract the parts of the filename.
+folder = os.path.dirname(fn)
+fnbase = os.path.basename(fn)
+
+# Make sure it's a TextExpander file.
+if fnbase[-13:] != '.textexpander':
+  sys.exit(fnbase + " is not a TextExpander file.")
+
+# Generate the .tedlist filename.
+tedist = folder + '/' + fnbase[:-13] + '-2.textexpander'
+
+# Parse the snippet file.
+te = plistlib.readPlist(fn)
+
+# Go through the snippets, allowing the user to change each abbreviation.
+for i in range(len(te['snippetsTE2'])):
+  print 'Label: ' + te['snippetsTE2'][i]['label']
+  newabbrev = raw_input('Abbreviation [' + te['snippetsTE2'][i]['abbreviation'] + ']: ')
+  if newabbrev != '':
+    te['snippetsTE2'][i]['abbreviation'] = newabbrev
+  print
+                                            
+# Write out the new .tedist file.
+plistlib.writePlist(te, tedist)
