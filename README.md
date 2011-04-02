@@ -32,7 +32,7 @@ If you want to change more than just the prefix, run `reabbrev`. It loops throug
     Label: ¾
     Abbreviation [;3/4]: 3//4
 
-and so on. The current abbreviation is given in square brackets. If you just hit the return key, the current abbreviation is retained; if you type anything else (and then hit the return key), that will be the new abbreviation. The new library will *not* overwrite the old one; it will be saved with the same name, but with a "-2" appended. In the example above, the new file will be "Symbols-2.textexpander" and will be saved on my Desktop.
+and so on. The current abbreviation is given in square brackets. If you just hit the return key, the current abbreviation is retained; if you type anything else (and then hit the return key), that will be the new abbreviation. The new library will *not* overwrite the old one; it will be saved with the same name, but with a "-2" appended. In the example above, the new file will be "Symbols-2.textexpander."
 
 
 [1]: http://te-snippets.com/
