@@ -1,4 +1,4 @@
-This is a simple Python script for taking your [TextExpander][2] snippet groups and putting them in a form suitable for inclusion in the [TE-Snippets][1] community site.
+Tedist is a simple Python script for taking your [TextExpander][2] snippet groups and putting them in a form suitable for inclusion in the [TE-Snippets][1] community site.
 
 Many people who use TextExpander regularly have a naming convention they use with all their snippets. My snippets, for example, always start with a semicolon. Brett Terpstra's always start with a pair of commas. The idea is to use a prefix that's both easy to type—so it takes little effort to use—and will never show up in the course of your normal writing or programming—so your snippets don't expand accidentally.
 
@@ -16,6 +16,23 @@ Thus, to prepare my Symbols snippet library for TE-Snippets, I'd run this,
     tedist Symbols.textexpander ';'
 
 and I'd get a new `Symbols.tedist` in the same directory.
+
+If you want to change more than just the prefix, run `reabbrev`. It loops through all the snippets in the given file and allows you to change the abbreviation of each one. A session would look like this:
+
+    ./reabbrev ~/Desktop/Symbols.textexpander 
+    Label: ½
+    Abbreviation [;1/2]: 
+
+    Label: ¼
+    Abbreviation [;1/4]: 1//4
+
+    Label: ⅛
+    Abbreviation [;1/8]: 1//8
+
+    Label: ¾
+    Abbreviation [;3/4]: 3//4
+
+and so on. The current abbreviation is given in square brackets. If you just hit the return key, the current abbreviation is retained; if you type anything else (and then hit the return key), that will be the new abbreviation. The new library will *not* overwrite the old one; it will be saved with the same name, but with a "-2" appended. In the example above, the new file will be "Symbols-2.textexpander" and will be saved on my Desktop.
 
 
 [1]: http://te-snippets.com/
