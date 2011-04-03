@@ -1,33 +1,46 @@
 #!/usr/bin/python
+# encoding: utf-8
+
+"""
+Replace textexpander snippet prefixes with your prefix of choice
+"""
 
 import plistlib
 import sys
 import os.path
 
-# Get the TextExpander snippet filename and the prefix from the command line.
-fn = os.path.abspath(sys.argv[1])
-prefix = sys.argv[2]
 
-# Extract the parts of the filename.
-folder = os.path.dirname(fn)
-fnbase = os.path.basename(fn)
+# Extract folder and filename
+inp = sys.argv[1]
+prefix = sys.argv[2]
+basename, extension = os.path.splitext(inp)
 
 # Make sure it's a TextExpander file.
-if fnbase[-13:] != '.textexpander':
-  sys.exit(fnbase + " is not a TextExpander file.")
+if extension != '.textexpander':
+    print("%s is not a TextExpander file." % inp)
+    sys.exit(-1)
 
-# Generate the .tedlist filename.
-tedist = folder + '/' + fnbase[:-13] + '.tedist'
+# Generate the new filename.
+tedist = basename + '.tedist'
 
-# Parse the snippet file.
-te = plistlib.readPlist(fn)
+# Parse the snippet file
+try:
+    te = plistlib.readPlist(inp)
+except IOError:
+    print("Couldn't open %s to read from." % inp)
+    sys.exit(-1)
 
 # Go through the snippets, replacing each prefix with [[PREFIX]].
 for i in range(len(te['snippetsTE2'])):
-  prelength = len(prefix)
-  if te['snippetsTE2'][i]['abbreviation'][0:prelength] == prefix:
-    te['snippetsTE2'][i]['abbreviation'] = '[[PREFIX]]' + \
-                                            te['snippetsTE2'][i]['abbreviation'][prelength:]
+    prelength = len(prefix)
+    if te['snippetsTE2'][i]['abbreviation'][0:prelength] == prefix:
+        te['snippetsTE2'][i]['abbreviation'] = '[[PREFIX]]' + \
+        te['snippetsTE2'][i]['abbreviation'][prelength:]
 
 # Write out the new .tedist file.
-plistlib.writePlist(te, tedist)
+try:
+    plistlib.writePlist(te, tedist)
+    print "wrote:", tedist
+except IOError:
+    print "Couldn't write new textexpander file", tedist
+
