@@ -16,7 +16,7 @@ if fnbase[-13:] != '.textexpander':
   sys.exit(fnbase + " is not a TextExpander file.")
 
 # Generate the new filename.
-tedist = folder + '/' + fnbase[:-13] + '-2.textexpander'
+newfn = folder + '/' + fnbase[:-13] + '-2.textexpander'
 
 # Parse the snippet file.
 te = plistlib.readPlist(fn)
@@ -29,5 +29,5 @@ for i in range(len(te['snippetsTE2'])):
     te['snippetsTE2'][i]['abbreviation'] = newabbrev
   print
                                             
-# Write out the new .tedist file.
-plistlib.writePlist(te, tedist)
+# Write out the new .textexpander file.
+plistlib.writePlist(te, newfn)
