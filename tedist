@@ -2,22 +2,21 @@
 # encoding: utf-8
 
 """
-Replace textexpander snippet prefixes with your prefix of choice
+Read a .textexpander snippet file and generate a .tedist file with standardized prefixes.
 """
 
 import plistlib
 import sys
 import os.path
 
-
 # Extract folder and filename
-inp = sys.argv[1]
+infile = sys.argv[1]
 prefix = sys.argv[2]
-basename, extension = os.path.splitext(inp)
+basename, extension = os.path.splitext(infile)
 
 # Make sure it's a TextExpander file.
 if extension != '.textexpander':
-    print("%s is not a TextExpander file." % inp)
+    print("%s is not a TextExpander file." % infile)
     sys.exit(-1)
 
 # Generate the new filename.
@@ -25,9 +24,9 @@ tedist = basename + '.tedist'
 
 # Parse the snippet file
 try:
-    te = plistlib.readPlist(inp)
+    te = plistlib.readPlist(infile)
 except IOError:
-    print("Couldn't open %s to read from." % inp)
+    print("Couldn't open %s to read from." % infile)
     sys.exit(-1)
 
 # Go through the snippets, replacing each prefix with [[PREFIX]].

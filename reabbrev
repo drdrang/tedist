@@ -2,22 +2,20 @@
 # encoding: utf-8
 
 """
-Attempt to read the contents of a .textexpander plist file, and generate a new
-file with the user's abbreviation of choice
+Attempt to read the contents of a .textexpander plist file, and generate a new file with the user's abbreviations of choice.
 """
 
 import plistlib
 import sys
 import os.path
 
-
 # Extract folder and filename
-inp = sys.argv[1]
-basename, extension = os.path.splitext(inp)
+infile = sys.argv[1]
+basename, extension = os.path.splitext(infile)
 
 # Make sure it's a TextExpander file.
 if extension != '.textexpander':
-    print("%s is not a TextExpander file." % inp)
+    print("%s is not a TextExpander file." % infile)
     sys.exit(-1)
 
 # Generate the new filename.
@@ -25,10 +23,11 @@ outfile = basename + "-2" + extension
 
 # Parse the snippet file.
 try:
-    te = plistlib.readPlist(inp)
+    te = plistlib.readPlist(infile)
 except IOError:
-    print("Couldn't open %s to read from." % inp)
+    print("Couldn't open %s to read from." % infile)
     sys.exit(-1)
+
 # Go through the snippets, allowing the user to change each abbreviation.
 for i in range(len(te['snippetsTE2'])):
     print 'Label: ' + te['snippetsTE2'][i]['label']
