@@ -1,33 +1,47 @@
 #!/usr/bin/python
+# encoding: utf-8
+
+"""
+Attempt to read the contents of a .textexpander plist file, and generate a new
+file with the user's abbreviation of choice
+"""
 
 import plistlib
 import sys
 import os.path
 
-# Get the TextExpander snippet filename from the command line.
-fn = os.path.abspath(sys.argv[1])
 
-# Extract the parts of the filename.
-folder = os.path.dirname(fn)
-fnbase = os.path.basename(fn)
+# Extract folder and filename
+inp = sys.argv[1]
+basename, extension = os.path.splitext(inp)
 
 # Make sure it's a TextExpander file.
-if fnbase[-13:] != '.textexpander':
-  sys.exit(fnbase + " is not a TextExpander file.")
+if extension != '.textexpander':
+    print("%s is not a TextExpander file." % inp)
+    sys.exit(-1)
 
 # Generate the new filename.
-newfn = folder + '/' + fnbase[:-13] + '-2.textexpander'
+outfile = basename + "-2" + extension
 
 # Parse the snippet file.
-te = plistlib.readPlist(fn)
-
+try:
+    te = plistlib.readPlist(inp)
+except IOError:
+    print("Couldn't open %s to read from." % inp)
+    sys.exit(-1)
 # Go through the snippets, allowing the user to change each abbreviation.
 for i in range(len(te['snippetsTE2'])):
-  print 'Label: ' + te['snippetsTE2'][i]['label']
-  newabbrev = raw_input('Abbreviation [' + te['snippetsTE2'][i]['abbreviation'] + ']: ')
-  if newabbrev != '':
-    te['snippetsTE2'][i]['abbreviation'] = newabbrev
-  print
-                                            
+    print 'Label: ' + te['snippetsTE2'][i]['label']
+    newabbrev = raw_input(
+            'Abbreviation [' + te['snippetsTE2'][i]['abbreviation'] + ']: ')
+    if newabbrev != '':
+        te['snippetsTE2'][i]['abbreviation'] = newabbrev
+    print
+
 # Write out the new .textexpander file.
-plistlib.writePlist(te, newfn)
+try:
+    plistlib.writePlist(te, basename + outfile)
+    print "wrote:", outfile
+except IOError:
+    print "Couldn't write new textexpander file", outfile
+    sys.exit(-1)
