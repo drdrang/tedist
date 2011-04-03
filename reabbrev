@@ -40,8 +40,9 @@ for i in range(len(te['snippetsTE2'])):
 
 # Write out the new .textexpander file.
 try:
-    plistlib.writePlist(te, basename + outfile)
+    plistlib.writePlist(te, outfile)
     print "wrote:", outfile
 except IOError:
     print "Couldn't write new textexpander file", outfile
     sys.exit(-1)
+
