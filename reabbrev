@@ -15,7 +15,7 @@ fnbase = os.path.basename(fn)
 if fnbase[-13:] != '.textexpander':
   sys.exit(fnbase + " is not a TextExpander file.")
 
-# Generate the .tedlist filename.
+# Generate the new filename.
 tedist = folder + '/' + fnbase[:-13] + '-2.textexpander'
 
 # Parse the snippet file.
