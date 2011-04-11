@@ -17,6 +17,12 @@ Thus, to prepare my Symbols snippet library for TE-Snippets, I'd run this,
 
 and I'd get a new `Symbols.tedist` in the same directory.
 
+Teprefix is a script for directly changing the abbreviation prefix from one string to another. It's meant to be used on snippet libraries that haven't been standardized to the `.tedist` form. To change from my form to Brett's, you'd run
+
+    teprefix -o ';' -n ',,' Symbols.textexpander
+
+Teprefix has a help message that explains the options and the defaults.
+
 If you want to change more than just the prefix, run `reabbrev`. It loops through all the snippets in the given file and allows you to change the abbreviation of each one. A session would look like this:
 
     reabbrev Symbols.textexpander 
