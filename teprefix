@@ -73,17 +73,17 @@ except IOError:
     print("Couldn't open %s to read from." % infile)
     sys.exit(-1)
 
-# Go through the snippets, replacing each prefix with [[PREFIX]].
+# Go through the snippets, replacing each oldprefix with newprefix.
 for i in range(len(te['snippetsTE2'])):
     prelength = len(oldprefix)
     if te['snippetsTE2'][i]['abbreviation'][0:prelength] == oldprefix:
         te['snippetsTE2'][i]['abbreviation'] = newprefix + \
         te['snippetsTE2'][i]['abbreviation'][prelength:]
 
-# Write out the new .tedist file.
+# Write out the new .textexpander file.
 try:
     plistlib.writePlist(te, outfile)
-    print "wrote:", outfile
+    print "Wrote:", outfile
 except IOError:
     print "Couldn't write new textexpander file", outfile
 
