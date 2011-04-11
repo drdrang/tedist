@@ -1,0 +1,89 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+"""
+Read a .textexpander snippet file and generate a new one with a different abbreviation prefix.
+"""
+
+import plistlib
+import sys
+import os.path
+import getopt
+
+usage = '''Usage: teprefix [options] tefile
+
+Create a new TextExpander file with different abbreviation prefixes.
+
+Options:
+  -o <old prefix>       The old prefix, i.e., the one that's used in
+  --old=<old prefix>    the existing TextExpander file. It's best
+                        to enclose the prefix in single quotes to 
+                        avoid interpretation by the shell. Default is
+                        the empty string.
+
+  -n <new prefix>       The new prefix, i.e., the one you want to use.
+  --n=<new prefix>      Again, it's best to enclose the prefix in single
+                        quotes to avoid interpretation by the shell.
+                        Default is the empty string.
+
+  -h, --help            Show this usage message.
+'''
+
+# Get the arguments from the command line.
+try:
+  optlist, args = getopt.getopt(sys.argv[1:], 'o:n:h', ['old=', 'new=', 'help'])
+except getopt.GetoptError, err:
+  print str(err)
+  print usage
+  sys.exit(2)
+
+# Process the options.
+oldprefix = '';       # default
+newprefix = '';       # default
+for o, a in optlist:
+  if o in ('-o', '--old'):
+    oldprefix = a
+  elif o in ('-n', '--new'):
+    newprefix = a
+  else:
+    print usage
+    sys.exit()
+
+# Extract folder and filename.
+try:
+  infile = args[0]
+  basename, extension = os.path.splitext(infile)
+except IndexError:
+  print "No input filename."
+  print usage
+  sys.exit()
+
+# Make sure it's a TextExpander file.
+if extension != '.textexpander':
+    print("%s is not a TextExpander file." % infile)
+    sys.exit(-1)
+
+# Generate the new filename.
+outfile = basename + '-new.textexpander'
+
+# Parse the snippet file
+try:
+    te = plistlib.readPlist(infile)
+except IOError:
+    print("Couldn't open %s to read from." % infile)
+    sys.exit(-1)
+
+# Go through the snippets, replacing each prefix with [[PREFIX]].
+for i in range(len(te['snippetsTE2'])):
+    prelength = len(oldprefix)
+    if te['snippetsTE2'][i]['abbreviation'][0:prelength] == oldprefix:
+        te['snippetsTE2'][i]['abbreviation'] = newprefix + \
+        te['snippetsTE2'][i]['abbreviation'][prelength:]
+
+# Write out the new .tedist file.
+try:
+    plistlib.writePlist(te, outfile)
+    print "wrote:", outfile
+except IOError:
+    print "Couldn't write new textexpander file", outfile
+
