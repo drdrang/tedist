@@ -21,7 +21,7 @@ Teprefix is a script for directly changing the abbreviation prefix from one stri
 
     teprefix -o ';' -n ',,' Symbols.textexpander
 
-Teprefix has a help message that explains the options and the defaults.
+and you'd get a Symbols-new.textexpander file with double comma prefixes. Teprefix has a help message that explains the options and the defaults.
 
 If you want to change more than just the prefix, run `reabbrev`. It loops through all the snippets in the given file and allows you to change the abbreviation of each one. A session would look like this:
 
