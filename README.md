@@ -40,6 +40,23 @@ If you want to change more than just the prefix, run `reabbrev`. It loops throug
 
 and so on. The current abbreviation is given in square brackets. If you just hit the return key, the current abbreviation is retained; if you type anything else (and then hit the return key), that will be the new abbreviation. The new library will *not* overwrite the old one; it will be saved with the same name, but with a "-2" appended. In the example above, the new file will be "Symbols-2.textexpander."
 
+`Tetable` is a script for printing out a tabular description of a TextExpander library. The table can take the form of
+
+1. A Markdown table (default)
+2. A tab-separated table
+3. An HTML table
+
+The output will look something like this
+
+    | To insert | Type |
+    |:-----:|:----:|
+    | € | ;euro |
+    | £ | ;pound |
+    | ¢ | ;cent |
+    | ′ | ;ft |
+    | ″ | ;in |
+
+for the default Markdown output. Because `tetable` isn't particularly clever about linebreaks, it's best used on libraries that have short snippets.
 
 [1]: http://te-snippets.com/
 [2]: http://smilesoftware.com/TextExpander/

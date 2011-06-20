@@ -1,0 +1,88 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+"""
+Read a .textexpander snippet file and generate a Markdown table
+that describes its contents. Useful for short snippets only.
+"""
+
+import plistlib
+import sys
+import os.path
+import getopt
+
+usage = '''Usage: tetable [option] tefile
+
+Create a table that describes a TextExpander library.
+
+Options:
+  -m, --markdown        Markdown table (default)
+  -t, --tab             Tab-separated table
+  -w, --web             HTML table
+  -h, --help            Show this usage message.
+'''
+
+# Get the arguments from the command line.
+try:
+  optlist, args = getopt.getopt(sys.argv[1:], 'hmtw', ['help', 'markdown', 'tab', 'web'])
+except getopt.GetoptError, err:
+  print str(err)
+  print usage
+  sys.exit(2)
+
+# Process the options.
+tableType = 'markdown'
+for o, a in optlist:
+  if o in ('-t', '--tab'):
+    tableType = 'tab'
+  elif o in ('-w', '--web'):
+    tableType = 'web'
+  elif o in ('-m', '--markdown'): 
+    tableType = 'markdown'
+  else:
+    print usage
+    sys.exit()
+
+# Extract folder and filename.
+try:
+  infile = args[0]
+  basename, extension = os.path.splitext(infile)
+except IndexError:
+  print "No input filename."
+  print usage
+  sys.exit()
+
+# Make sure it's a TextExpander file.
+if extension != '.textexpander':
+    print("%s is not a TextExpander file." % infile)
+    sys.exit(-1)
+
+# Parse the snippet file
+try:
+    te = plistlib.readPlist(infile)
+except IOError:
+    print("Couldn't open %s to read from." % infile)
+    sys.exit(-1)
+
+# The table header.
+header = {'tab': 'To insert\tType',
+          'web': '<table>\n<tr><th>To insert</th><th>Type</th></tr>',
+          'markdown':'| To insert | Type |\n|:-----:|:----:|'}
+# The row templates
+row = {'tab': '%s\t%s',
+       'web': '<tr><td>%s</td><td>%s</td></tr>',
+       'markdown': '| %s | %s |'}
+
+# The table footer.
+footer = {'tab': '',
+          'web': '</table>',
+          'markdown': ''}
+
+# Print the table.
+print header[tableType]
+for i in range(len(te['snippetsTE2'])):
+    print row[tableType] % (te['snippetsTE2'][i]['plainText'], te['snippetsTE2'][i]['abbreviation'])
+print footer[tableType]
+
+
+    
